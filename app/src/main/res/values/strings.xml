@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DemoPOC</string>
+    <string name="invite_text">Hi, If you open this link and follow the instructions you can share your account details with me.\n\n</string>
+    <string name="invite_url">https://www.lloydsbanking.com/invite=123 \n\nThanks Chetan</string>
+</resources>
