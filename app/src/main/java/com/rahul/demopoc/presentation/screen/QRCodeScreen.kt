@@ -1,6 +1,7 @@
 package com.rahul.demopoc.presentation.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,19 +31,31 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.rahul.demopoc.R
 import com.rahul.demopoc.presentation.viewmodel.ShareViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QRCodeScreen(viewModel: ShareViewModel) {
+fun QRCodeScreen(
+    viewModel: ShareViewModel,
+    scope: CoroutineScope,
+    sheetState: SheetState,
+    onCloseClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(start = 20.dp, bottom = 20.dp, end = 20.dp)
             .wrapContentSize(align = Alignment.BottomCenter),
         verticalArrangement = Arrangement.Bottom,
 
         ) {
 
-        TitleWithIcon()
+        TitleWithIcon() {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                onCloseClick()
+            }
+        }
 
         Divider(
             modifier = Modifier.padding(top = 15.dp)
@@ -63,7 +78,7 @@ fun QRCodeScreen(viewModel: ShareViewModel) {
 }
 
 @Composable
-fun TitleWithIcon() {
+fun TitleWithIcon(onClose: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -90,9 +105,14 @@ fun TitleWithIcon() {
         Image(
             painter = painterResource(id = R.drawable.ic_close_24),
             contentDescription = null,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier
+                .size(20.dp)
+                .clickable {
+                    onClose()
+                },
             alignment = Alignment.TopEnd,
-        )
+
+            )
     }
 }
 
@@ -149,7 +169,3 @@ fun FAQ() {
     }
     Divider()
 }
-
-
-
-

@@ -62,36 +62,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    ShareScreen(viewModel)
-                    QRCodeScreen(viewModel = viewModel)
+                    ShareScreen(viewModel)
                 }
             }
         }
 
         viewModel.shareIntent.observe(this) { intent ->
             startActivity(Intent.createChooser(intent, "Share via"))
-        }
-    }
-}
-
-@Composable
-fun ShareScreen(viewModel: ShareViewModel) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.Bottom,
-    ) {
-
-        Button(onClick = {  }) {
-            Text("Generate QR Code")
-        }
-        val inviteText = stringResource(id = R.string.invite_text)
-        val url = stringResource(id = R.string.invite_url)
-        Button(onClick = { viewModel.prepareShareIntent(inviteText, url) }) {
-            Text("Share the Invite")
         }
     }
 }
