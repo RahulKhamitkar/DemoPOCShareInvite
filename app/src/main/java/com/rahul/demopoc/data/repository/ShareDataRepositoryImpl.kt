@@ -8,8 +8,8 @@ class ShareDataRepositoryImpl : ShareDataUseCase {
     override fun getShareIntent(data: ShareData): Intent {
         return Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_SUBJECT,"Lloyds Banking Share Invite")
-            putExtra(Intent.EXTRA_TEXT, "Lloyds Banking Share Invite"+"\n\n"+data.message + data.url)
+            putExtra(Intent.EXTRA_TEXT, data.message + data.url)
+            putExtra(Intent.EXTRA_TITLE,"Lloyds Banking Share Invite")
             type = "text/plain"
         }
     }
