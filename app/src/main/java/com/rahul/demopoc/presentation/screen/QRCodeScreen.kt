@@ -16,6 +16,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,20 +30,24 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rahul.demopoc.R
-import com.rahul.demopoc.presentation.viewmodel.ShareViewModel
+import com.rahul.demopoc.presentation.viewmodel.QRCodeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QRCodeScreen(
-    viewModel: ShareViewModel,
+    viewModel: QRCodeViewModel = hiltViewModel(),
     scope: CoroutineScope,
     sheetState: SheetState,
     onCloseClick: () -> Unit
 ) {
+    val result by viewModel.qrCodeResponse.collectAsState()
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,7 +78,7 @@ fun QRCodeScreen(
                 fontSize = 25.sp
             )
         )
-        QRCodeWithText()
+        QRCodeWithText(result.qrCodeResponseURL)
         FAQ()
     }
 }
@@ -117,7 +123,7 @@ fun TitleWithIcon(onClose: () -> Unit) {
 }
 
 @Composable
-fun QRCodeWithText() {
+fun QRCodeWithText(qrCodeResponseURL: String?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -125,10 +131,10 @@ fun QRCodeWithText() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = "",
+            model = qrCodeResponseURL,
             contentDescription = null,
-            placeholder = painterResource(id = R.drawable.lloyds_qrcode),
-            error = painterResource(id = R.drawable.lloyds_qrcode),
+            placeholder = painterResource(id = R.drawable.ic_downloading),
+            error = painterResource(id = R.drawable.ic_error),
             modifier = Modifier
                 .width(100.dp)
                 .height(100.dp)

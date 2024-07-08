@@ -75,5 +75,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.coil)
+    implementation(libs.retrofit.retrofit)
+    implementation(libs.retrofit.gson.converter)
+    implementation(libs.hilt.navigation.compose)
 }
 

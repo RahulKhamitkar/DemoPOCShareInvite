@@ -42,7 +42,7 @@ fun ShareScreen(viewModel: ShareViewModel) {
         verticalAlignment = Alignment.Bottom,
     ) {
 
-        Button(onClick = {  showBottomSheet = true }) {
+        Button(onClick = { showBottomSheet = true }) {
             Text("Generate QR Code")
 
             if (showBottomSheet) {
@@ -52,7 +52,7 @@ fun ShareScreen(viewModel: ShareViewModel) {
                     },
                     sheetState = sheetState
                 ) {
-                    QRCodeScreen(viewModel = viewModel, scope,sheetState){
+                    QRCodeScreen(scope =  scope, sheetState = sheetState){
                         if (!sheetState.isVisible) {
                             showBottomSheet = false
                         }
