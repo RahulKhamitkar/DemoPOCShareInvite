@@ -18,9 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -34,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rahul.demopoc.R
 import com.rahul.demopoc.presentation.viewmodel.QRCodeViewModel
+import com.rahul.demopoc.util.base64ToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -85,6 +89,10 @@ fun QRCodeScreen(
 
 @Composable
 fun TitleWithIcon(onClose: () -> Unit) {
+    val base64String = stringResource(id = R.string.image_base_64)
+    val bitmap = remember(base64String) { base64ToBitmap(base64String) }
+
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -92,12 +100,15 @@ fun TitleWithIcon(onClose: () -> Unit) {
         Row {
             val imageModifier = Modifier
                 .size(40.dp)
-            Image(
-                painter = painterResource(id = R.drawable.lloyds_icon),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = imageModifier
-            )
+            bitmap?.let {
+                val imageBitmap: ImageBitmap = it.asImageBitmap()
+                Image(
+                    bitmap = imageBitmap,
+                    contentDescription = null,
+                    modifier = imageModifier,
+                    contentScale = ContentScale.Fit
+                )
+            }
 
             Text(
                 text = "Scan QR Code",
