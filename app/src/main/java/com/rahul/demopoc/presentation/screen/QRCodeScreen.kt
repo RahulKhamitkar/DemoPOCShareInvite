@@ -82,7 +82,7 @@ fun QRCodeScreen(
                 fontSize = 25.sp
             )
         )
-        QRCodeWithText(result.qrCodeResponseURL)
+        QRCodeWithText(result.qrCodeResponseURL?: "")
         FAQ()
     }
 }
@@ -134,24 +134,38 @@ fun TitleWithIcon(onClose: () -> Unit) {
 }
 
 @Composable
-fun QRCodeWithText(qrCodeResponseURL: String?) {
+fun QRCodeWithText(qrCodeResponseURL: String) {
+    val base64String = stringResource(id = R.string.qr_code_base_64)
+    val bitmap = remember(base64String) { base64ToBitmap(base64String) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 25.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = qrCodeResponseURL,
-            contentDescription = null,
-            placeholder = painterResource(id = R.drawable.ic_downloading),
-            error = painterResource(id = R.drawable.ic_error),
-            modifier = Modifier
+        bitmap?.let {
+            val imageBitmap: ImageBitmap = it.asImageBitmap()
+            Image(
+                bitmap = imageBitmap,
+                contentDescription = null,
+                modifier = Modifier
                 .width(100.dp)
-                .height(100.dp)
-                .testTag("QRCodeImage"),
-            contentScale = ContentScale.Inside
-        )
+                .height(100.dp),
+                contentScale = ContentScale.Fit
+            )
+        }
+//        AsyncImage(
+//            model = qrCodeResponseURL,
+//            contentDescription = null,
+//            placeholder = painterResource(id = R.drawable.ic_downloading),
+//            error = painterResource(id = R.drawable.ic_error),
+//            modifier = Modifier
+//                .width(100.dp)
+//                .height(100.dp)
+//                .testTag("QRCodeImage"),
+//            contentScale = ContentScale.Inside
+//        )
+
         val smallScreenAdaptedParagraph =
             LineBreak.Paragraph.copy(strategy = LineBreak.Strategy.Simple)
 
